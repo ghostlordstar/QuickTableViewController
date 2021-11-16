@@ -28,6 +28,7 @@ import UIKit
 
 /// A class that represents a row that triggers certain navigation when selected.
 open class NavigationRow<T: UITableViewCell>: NavigationRowCompatible, Equatable {
+  public var inputText: InputText?
 
   // MARK: - Initializer
 

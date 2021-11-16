@@ -77,9 +77,22 @@ internal final class ExampleViewController: QuickTableViewController {
         OptionRow(text: "Option 2", isSelected: false, action: didToggleSelection()),
         OptionRow(text: "Option 3", isSelected: false, action: didToggleSelection())
       ], footer: "See RadioSection for more details."),
-
+      
+      Section(title: "TextField", rows: [
+        TextFieldRow(text: "title1", inputText: InputText.text("", placeholderText: "请输入文本", clearButtonMode: .always), icon: nil, customization: nil, action: { row in
+          print("text1: \(row.inputText?.text)")
+        }),
+        TextFieldRow(text: "title2", inputText: InputText.text("这是原始文本", placeholderText: "请输入文本", clearButtonMode: .always), icon: nil, customization: nil, action: { row in
+          print("text2: \(row.inputText?.text)")
+        }),
+        TextFieldRow(text: "", inputText: InputText.text("这个没有标题", placeholderText: "请输入文本", clearButtonMode: .always), icon: nil, customization: nil, action: { row in
+          print("text3: \(row.inputText?.text)")
+        }),
+      ], footer: "Tap and input something."),
       debugging
     ]
+    
+    self.tableView.keyboardDismissMode = .onDrag
   }
 
   // MARK: - UITableViewDataSource

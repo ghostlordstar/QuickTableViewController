@@ -51,6 +51,9 @@ open class TapActionRow<T: TapActionCell>: TapActionRowCompatible, Equatable {
   /// The detail text is disabled in `TapActionRow`.
   public let detailText: DetailText? = nil
 
+  /// The input Text of textField or textView.
+  public var inputText: InputText?
+  
   /// A closure that will be invoked when the row is selected.
   public let action: ((Row) -> Void)?
 

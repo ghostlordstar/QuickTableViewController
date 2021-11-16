@@ -1,9 +1,9 @@
 //
-//  SwitchRow.swift
+//  TextFieldRow.swift
 //  QuickTableViewController
 //
-//  Created by Ben on 01/09/2015.
-//  Copyright (c) 2015 bcylin.
+//  Created by Hansen on 2021/11/12.
+//  Copyright © 2021 bcylin. All rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -26,106 +26,99 @@
 
 import UIKit
 
-/// A class that represents a row with a switch.
-open class SwitchRow<T: SwitchCell>: SwitchRowCompatible, Equatable {
-
+/// A class that represents a row with a textfield.
+open class TextFieldRow<T: TextFieldCell>: TextFieldRowCompatible, Equatable {
+  
+  public var detailText: DetailText?
+  
   public var inputText: InputText?
   
   // MARK: - Initializer
-
-  /// Initializes a `SwitchRow` with a title, a switch state and an action closure.
-  /// The detail text, icon and the customization closure are optional.
+  
+  /// Initializes a `TextFieldRow` with a title and an action closure.
+  /// The inputText, icon and the customization closure are optional.
   public init(
     text: String,
-    detailText: DetailText? = nil,
-    switchValue: Bool,
+    inputText: InputText? = nil,
     icon: Icon? = nil,
     customization: ((UITableViewCell, Row & RowStyle) -> Void)? = nil,
     action: ((Row) -> Void)?
   ) {
     self.text = text
-    self.detailText = detailText
-    self.switchValue = switchValue
+    self.inputText = inputText
     self.icon = icon
     self.customize = customization
     self.action = action
+    self.inputTextValue = self.inputText?.textValue()
   }
-
-  // MARK: - SwitchRowCompatible
-
-  /// The state of the switch.
-  public var switchValue: Bool = false {
+  
+  // MARK: - TextFieldRowCompatible
+  public var inputTextValue: String? {
     didSet {
-      guard switchValue != oldValue else {
-        return
-      }
+      guard self.inputTextValue != oldValue else { return }
       DispatchQueue.main.async {
+        self.inputText = self.inputText?.update(text: self.inputTextValue)
         self.action?(self)
       }
     }
   }
-
+  
   // MARK: - Row
-
+  
   /// The text of the row.
   public let text: String
-
-  /// The detail text of the row.
-  public let detailText: DetailText?
-
-  /// A closure that will be invoked when the `switchValue` is changed.
+  
+  /// A closure that will be invoked when the `inputText` is changed.
   public let action: ((Row) -> Void)?
-
+  
   // MARK: - RowStyle
-
+  
   /// The type of the table view cell to display the row.
   public let cellType: UITableViewCell.Type = T.self
-
+  
   /// Returns the reuse identifier of the table view cell to display the row.
   public var cellReuseIdentifier: String {
-    return T.reuseIdentifier + (detailText?.style.stringValue ?? "")
+    return T.reuseIdentifier + text
   }
-
+  
   /// Returns the table view cell style for the specified detail text.
   public var cellStyle: UITableViewCell.CellStyle {
     return detailText?.style ?? .default
   }
-
+  
   /// The icon of the row.
   public let icon: Icon?
-
-  #if os(iOS)
-
+  
+#if os(iOS)
+  
   /// The default accessory type is `.none`.
   public let accessoryType: UITableViewCell.AccessoryType = .none
-
-  /// The `SwitchRow` should not be selectable.
+  
+  /// The `TextFieldRow` should not be selectable.
   public let isSelectable: Bool = false
-
-  #elseif os(tvOS)
-
+  
+#elseif os(tvOS)
+  
   /// Returns `.checkmark` when the `switchValue` is on, otherwise returns `.none`.
   public var accessoryType: UITableViewCell.AccessoryType {
-    return switchValue ? .checkmark : .none
+    return .none
   }
-
-  /// The `SwitchRow` is selectable on tvOS.
+  
+  /// The `TextFieldRow` is selectable on tvOS.
   public let isSelectable: Bool = true
-
-  #endif
-
+  
+#endif
+  
   /// The additional customization during cell configuration.
   public let customize: ((UITableViewCell, Row & RowStyle) -> Void)?
-
+  
   // MARK: - Equatable
-
+  
   /// Returns true iff `lhs` and `rhs` have equal titles, detail texts, switch values, and icons.
-  public static func == (lhs: SwitchRow, rhs: SwitchRow) -> Bool {
-    return
-      lhs.text == rhs.text &&
-      lhs.detailText == rhs.detailText &&
-      lhs.switchValue == rhs.switchValue &&
-      lhs.icon == rhs.icon
+  public static func == (lhs: TextFieldRow, rhs: TextFieldRow) -> Bool {
+    return lhs.text == rhs.text &&
+    lhs.inputText == rhs.inputText &&
+    lhs.icon == rhs.icon
   }
-
+  
 }

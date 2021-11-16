@@ -117,6 +117,7 @@ open class QuickTableViewController: UIViewController, UITableViewDataSource, UI
     (cell as? Configurable)?.configure(with: row)
     #if os(iOS)
       (cell as? SwitchCell)?.delegate = self
+      (cell as? TextFieldCell)?.delegate = self
     #endif
     row.customize?(cell, row)
 
@@ -207,6 +208,19 @@ extension QuickTableViewController: SwitchCellDelegate {
     }
     row.switchValue = isOn
   }
+}
 
+extension QuickTableViewController: TextFieldCellDelegate {
+  // MARK: - TextFieldCellDelegate
+  
+  open func textFieldCell(_ cell: TextFieldCell, didChanged text: String?) {
+    guard
+      let indexPath = tableView.indexPath(for: cell),
+      let row = tableContents[indexPath.section].rows[indexPath.row] as? TextFieldRowCompatible
+    else {
+      return
+    }
+    row.inputTextValue = text
+  }
 }
 #endif

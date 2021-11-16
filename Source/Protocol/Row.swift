@@ -38,4 +38,6 @@ public protocol Row: class {
   /// A closure related to the action of the row.
   var action: ((Row) -> Void)? { get }
 
+  /// The input text or placeholder of the row.
+  var inputText: InputText? { get }
 }

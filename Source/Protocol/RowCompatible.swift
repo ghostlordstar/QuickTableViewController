@@ -51,3 +51,9 @@ public protocol SwitchRowCompatible: Row, RowStyle {
   /// The state of the switch.
   var switchValue: Bool { get set }
 }
+
+/// This protocol defines the compatible interface of a `TextFiledRow` regardless of its associated cell type.
+public protocol TextFieldRowCompatible: Row, RowStyle {
+  /// The text of textField.
+  var inputTextValue: String? { get set }
+}

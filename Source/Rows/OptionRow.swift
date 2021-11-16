@@ -28,7 +28,8 @@ import UIKit
 
 /// A class that represents a row of selectable option.
 open class OptionRow<T: UITableViewCell>: OptionRowCompatible, Equatable {
-
+  public var inputText: InputText?
+  
   // MARK: - Initializer
 
   /// Initializes an `OptionRow` with a text, a selection state and an action closure.
